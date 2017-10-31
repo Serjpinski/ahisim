@@ -1,5 +1,6 @@
 package flatland.ui;
 
+import flatland.model.Terrain;
 import flatland.model.World;
 
 import javax.swing.*;
@@ -9,29 +10,21 @@ import java.util.Random;
 public class WorldPanel extends JPanel {
 
     private final World world;
-    private final JLabel[][] grid;
+    private final Cell[][] grid;
     private final Thread updater;
 
     public WorldPanel(World world, Font font) {
 
         this.world = world;
 
-        grid = new JLabel[world.width][world.height];
+        grid = new Cell[world.width][world.height];
 
         for (int j = 0; j < world.height; j++) {
 
             for (int i = 0; i < world.width; i++) {
 
-                JLabel label = new JLabel();
-                label.setFont(font);
-                label.setPreferredSize(new Dimension(font.getSize(), font.getSize()));
-                label.setHorizontalAlignment(JLabel.CENTER);
-                label.setVerticalAlignment(JLabel.BOTTOM);
-                label.setOpaque(true);
-                label.setText("ç");
-
-                grid[i][j] = label;
-                this.add(grid[i][j]);
+                grid[i][j] = new Cell(world.terrain[i][j], world.entities[i][j], font);
+                this.add(grid[i][j].label);
             }
         }
 
@@ -60,13 +53,14 @@ public class WorldPanel extends JPanel {
     public void update() {
 
         Random random = new Random();
+        int max = Terrain.values().length;
 
         for (int i = 0; i < world.width; i++) {
 
             for (int j = 0; j < world.height; j++) {
 
                 //TODO remove this
-                grid[i][j].setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
+                grid[i][j].setTerrain(Terrain.values()[random.nextInt(max)]);
             }
         }
     }
