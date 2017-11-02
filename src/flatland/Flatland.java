@@ -14,7 +14,7 @@ public class Flatland {
     private static final int FONT_SIZE = 10;
 
     public static void main(String[] args) {
-        new GameWindow(new Game(new GameOptions(50, 30)),
+        new GameWindow(new Game(new GameOptions(100, 60)),
                 getTitle(), FONT_SIZE);
     }
 

@@ -38,7 +38,7 @@ public class World {
     private Terrain[][] generateInitialTerrain(int width, int height) {
 
         final int magic = (int) Math.round(Math.sqrt((width * height) / 2));
-        final int initialSeeds = magic;
+        final int initialSeeds = magic / 2;
         final int totalPerRound = magic;
         final int coastRounds = (int) Math.round(Math.sqrt(magic));
         final int baseRounds = magic - coastRounds;
@@ -68,13 +68,30 @@ public class World {
 
                 if (terrains[w][h] == null) {
 
-                    int neighs = Utils.ortogonalNeighboursWithValue(terrains, Terrain.PLAINS, w, h);
+                    int neighs = Utils.ortogonalNeighboursWithValue(terrains, false, null, w, h);
 
                     if (neighs > 0 && Utils.RANDOM.nextDouble() < 1.0 / (4 - neighs)) {
 
                         terrains[w][h] = Terrain.PLAINS;
                         added++;
                     }
+                }
+            }
+        }
+
+        // Fill gaps type 3
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (terrains[i][j] == null &&
+                        Utils.ortogonalNeighboursWithValue(terrains, true, Terrain.PLAINS, i, j) == 3) {
+                    terrains[i][j] = Terrain.FOREST;
+                }
+            }
+        }
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (terrains[i][j] == Terrain.FOREST) {
+                    terrains[i][j] = Terrain.PLAINS;
                 }
             }
         }
@@ -89,7 +106,7 @@ public class World {
                 int w = Utils.RANDOM.nextInt(width);
                 int h = Utils.RANDOM.nextInt(height);
 
-                if (terrains[w][h] == null && Utils.hasOrtogonalNeighboursWithValue(terrains, Terrain.PLAINS, w, h)) {
+                if (terrains[w][h] == null && Utils.hasOrtogonalNeighboursWithValue(terrains, false, null, w, h)) {
 
                     terrains[w][h] = Terrain.PLAINS;
                     added++;
@@ -97,11 +114,29 @@ public class World {
             }
         }
 
-        // Fill gaps
+        // Fill gaps type 3
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if (terrains[i][j] == null &&
-                        Utils.ortogonalNeighboursWithValue(terrains, Terrain.PLAINS, i, j) == 4) {
+                        Utils.ortogonalNeighboursWithValue(terrains, true, Terrain.PLAINS, i, j) == 3 &&
+                        Utils.RANDOM.nextBoolean()) {
+                    terrains[i][j] = Terrain.FOREST;
+                }
+            }
+        }
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (terrains[i][j] == Terrain.FOREST) {
+                    terrains[i][j] = Terrain.PLAINS;
+                }
+            }
+        }
+
+        // Fill gaps type 4
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (terrains[i][j] == null &&
+                        Utils.ortogonalNeighboursWithValue(terrains, false, null, i, j) == 4) {
                     terrains[i][j] = Terrain.PLAINS;
                 }
             }
