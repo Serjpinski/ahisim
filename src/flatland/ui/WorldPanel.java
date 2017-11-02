@@ -2,10 +2,10 @@ package flatland.ui;
 
 import flatland.model.Terrain;
 import flatland.model.World;
+import flatland.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Random;
 
 public class WorldPanel extends JPanel {
 
@@ -23,7 +23,7 @@ public class WorldPanel extends JPanel {
 
             for (int i = 0; i < world.width; i++) {
 
-                grid[i][j] = new Cell(world.terrain[i][j], world.entities[i][j], font);
+                grid[i][j] = new Cell(world.terrains[i][j], world.entities[i][j], font);
                 this.add(grid[i][j].label);
             }
         }
@@ -52,16 +52,13 @@ public class WorldPanel extends JPanel {
 
     public void update() {
 
-        Random random = new Random();
-        int max = Terrain.values().length;
-
-        for (int i = 0; i < world.width; i++) {
-
-            for (int j = 0; j < world.height; j++) {
-
-                //TODO remove this
-                grid[i][j].setTerrain(Terrain.values()[random.nextInt(max)]);
-            }
-        }
+//        int max = Terrain.values().length;
+//
+//        for (int i = 0; i < world.width; i++) {
+//            for (int j = 0; j < world.height; j++) {
+//                //TODO remove this
+//                grid[i][j].setTerrain(Terrain.values()[Utils.RANDOM.nextInt(max)]);
+//            }
+//        }
     }
 }
